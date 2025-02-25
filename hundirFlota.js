@@ -139,9 +139,12 @@ if(turno < 1) {
 } 
 }
     /* Cada turno se evaluará si se ha ganao' o todavía no */ 
-function victoria(){
-        // aquí irá la condición de victoria.
-     if(true){
-
+    function victoria() {
+        for (let barco of this.barcos) {
+            if (!barco.hundido) {
+                return false;
+            }
+        }
+        console.log('Has ganado jugador ' + this.color);
+        return true;
     }
-}
