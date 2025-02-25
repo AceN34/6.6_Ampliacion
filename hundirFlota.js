@@ -94,15 +94,32 @@ this.pintarBarco = function(i, j, direccion) {
         return;
     }
 
-    // AQUÍ REVISAR IS YA TIENE ANRTES LA CLASE BARCO, PARA NO PODER
-    //PONER UN BARCO ENCIMAA DE OTRO
+    // Comprobar si la casilla ya tiene un barco
+    if (this.tablero[i][j].classList.contains('barco')) {
+        mensaje.innerHTML = "<h3>No se puede colocar un barco sobre otro.</h3>";
+        return;
+    }
 
+    // Comprobar si es la primera celda del barco
     if (this.barcos[this.barcosColocados].length === 1) {
         this.barcos[this.barcosColocados].push([]); 
     }
 
-    this.barcos[this.barcosColocados][1].push([i, j]);
+    // Verificar si la colocación es válida según la dirección
+    let barcoActual = this.barcos[this.barcosColocados][1];
+    if (barcoActual.length > 0) {
+        let [ultimaI, ultimaJ] = barcoActual[barcoActual.length - 1];
+        if (direccion === "Vertical" && (j !== ultimaJ + 1 && j !== ultimaJ - 1)) {
+            mensaje.innerHTML = "<h3>El barco solo puede colocarse arriba o abajo en vertical desde la ultima casilla.</h3>";
+            return;
+        }
+        if (direccion === "Horizontal" && (i !== ultimaI + 1 && i !== ultimaI - 1)) {
+            mensaje.innerHTML = "<h3>El barco solo puede colocarse a la izquierda o derecha en horizontal desde la ultima casilla.</h3>";
+            return;
+        }
+    }
 
+    this.barcos[this.barcosColocados][1].push([i, j]);
     this.tablero[i][j].classList.add('barco');
 
     // Comprobar si el barco está completamente colocado
