@@ -62,6 +62,15 @@ function Jugador(color, tamanio) {
     }
 
     this.rotarBarco = function() {
+        // Obtener el barco que se está colocando
+        let barcoActual = this.tablero.barcos[this.tablero.barcosColocados];
+
+        // Verificar si el barcoActual está definido y si se ha empezado a colocar
+        if (barcoActual && barcoActual.length > 1 && barcoActual[1].length > 0) {
+            mensaje.innerHTML = "<h3>No se puede rotar mientras se está colocando un barco, excepto en la primera celda.</h3>";
+            return;
+        }
+
         if (this.direccion === "Horizontal") {
             this.direccion = "Vertical";
             direccionBarco.innerHTML = this.direccion;
@@ -109,11 +118,11 @@ this.pintarBarco = function(i, j, direccion) {
     let barcoActual = this.barcos[this.barcosColocados][1];
     if (barcoActual.length > 0) {
         let [ultimaI, ultimaJ] = barcoActual[barcoActual.length - 1];
-        if (direccion === "Vertical" && (j !== ultimaJ + 1 && j !== ultimaJ - 1)) {
+        if (direccion === "Vertical" && (j !== ultimaJ + 1 && j !== ultimaJ - 1 || i !== ultimaI)) {
             mensaje.innerHTML = "<h3>El barco solo puede colocarse arriba o abajo en vertical desde la ultima casilla.</h3>";
             return;
         }
-        if (direccion === "Horizontal" && (i !== ultimaI + 1 && i !== ultimaI - 1)) {
+        if (direccion === "Horizontal" && (i !== ultimaI + 1 && i !== ultimaI - 1 || j !== ultimaJ)) {
             mensaje.innerHTML = "<h3>El barco solo puede colocarse a la izquierda o derecha en horizontal desde la ultima casilla.</h3>";
             return;
         }
