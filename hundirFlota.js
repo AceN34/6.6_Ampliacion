@@ -3,7 +3,9 @@ window.onload = function() {
     const contenedor = document.getElementById('contenedor');
     const botones = document.getElementById('botones');
     const botonPrincipal = document.getElementById('botonPrincipal');
-
+    const mensaje = document.getElementById('mensaje');
+    const direccionBarco = document.getElementById('direccionBarco');
+    const mensajeBarco = document.getElementById('mensajeBarco');
 };
   // variables del programa
 let jugadorRojo;
@@ -17,7 +19,8 @@ function empezar(){
     jugadorRojo = new Jugador("rojo", tamanio);
     jugadorRojo.mostrarTablero();
     jugadorRojo.cambiarModo(); // lo pongo en modo colocar
-
+    direccionBarco.innerHTML = "Horizontal";
+    
     botones.removeChild(this.botonPrincipal);
 }
 // objeto jugador
@@ -28,9 +31,7 @@ function Jugador(color, tamanio) {
 
     // barcos
     this.botonRotar = null;
-    this.barcos = [];
-    let direccion = "horizontal";
-
+    this.direccion = "Horizontal";
 
     //métodos
     this.mostrarTablero = function(){
@@ -61,19 +62,19 @@ function Jugador(color, tamanio) {
     }
 
     this.rotarBarco = function() {
-        if (this.direccion === "horizontal") {
-            this.direccion = "vertical";
+        if (this.direccion === "Horizontal") {
+            this.direccion = "Vertical";
+            direccionBarco.innerHTML = this.direccion;
         } else {
-            this.direccion = "horizontal";
+            this.direccion = "Horizontal";
+            direccionBarco.innerHTML = this.direccion;
         }
         console.log(this.direccion);
     }
 
-    this.colocarBarco = function() { 
-
+    this.colocarBarco = function(i,j) {
+        this.tablero.pintarBarco(i,j, this.direccion);
     }
-
-
 }
 
 // objeto tablero
@@ -81,7 +82,37 @@ function Tablero(color, tamanio) {
 this.color = color;
 this.tamanio = tamanio;
 this.tablero = [];
-this.barcos = [];
+
+// variables de los barcos (el indice 0 es la length del barco)
+this.barcos = [[4],[2],[3],[2],[3],[2]];
+this.barcosColocados = 0;
+
+// pintar el tablero
+this.pintarBarco = function(i, j, direccion) {
+    if (this.barcosColocados >= this.barcos.length) {
+        console.log("Todos los barcos han sido colocados.");
+        return;
+    }
+
+    if (this.barcos[this.barcosColocados].length === 1) {
+        this.barcos[this.barcosColocados].push([]); 
+    }
+
+    this.barcos[this.barcosColocados][1].push([i, j]);
+
+    this.tablero[i][j].classList.add('barco');
+
+    // Comprobar si el barco está completamente colocado
+    if (this.barcos[this.barcosColocados][1].length === this.barcos[this.barcosColocados][0]) {
+        this.barcosColocados++; 
+    }
+
+    mensajeBarco.innerHTML = 
+        this.barcosColocados < this.barcos.length 
+        ? `Colocando barco de ${this.barcos[this.barcosColocados][0]} posiciones` 
+        : "Todos los barcos han sido colocados.";
+};
+
 
 // inicializar tablero
 this.inicializarTablero = function() {
@@ -111,7 +142,6 @@ this.mostrarTablero = function() {
             casilla.dataset.j = j;
 
             casilla.addEventListener('click', function(){
-  
                 devolverPosicion(i, j);
             });
 
@@ -133,7 +163,7 @@ function devolverPosicion(i, j) {
 console.log("Casilla seleccionada: ", i, j);
 if(turno < 1) {
     if(jugadorRojo.getModo() === true){ // aquí el tipo está en modo bob el constructor 
-
+        jugadorRojo.colocarBarco(i,j);
     }
 
 } 
@@ -145,6 +175,6 @@ if(turno < 1) {
                 return false;
             }
         }
-        console.log('Has ganado jugador ' + this.color);
+        mensaje.innerHTML = ('Has ganado jugador ' + this.color);
         return true;
     }
