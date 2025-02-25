@@ -6,6 +6,14 @@ body {
     flex-direction: column;
     font-family: Arial, sans-serif;
 }
+
+table {
+    border-collapse: collapse;
+    display: flex;
+    flex-direction: row;
+}
+
+/* clases */
 .tablero {
     display: grid;
     grid-template-columns: repeat(10, 40px);
