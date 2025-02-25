@@ -94,6 +94,9 @@ this.pintarBarco = function(i, j, direccion) {
         return;
     }
 
+    // AQUÍ REVISAR IS YA TIENE ANRTES LA CLASE BARCO, PARA NO PODER
+    //PONER UN BARCO ENCIMAA DE OTRO
+
     if (this.barcos[this.barcosColocados].length === 1) {
         this.barcos[this.barcosColocados].push([]); 
     }
