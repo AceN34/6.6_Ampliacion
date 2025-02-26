@@ -119,26 +119,19 @@ this.pintarBarco = function(i, j, direccion) {
     // Verificar si la colocación es válida según la dirección
     let barcoActual = this.barcos[this.barcosColocados][1];
     if (barcoActual.length > 0) {
-        let esValidaVertical = true;
-        let esValidaHorizontal = true;
-        //Comprueba que es la posicion es adyacente a alguna casilla del barco y que esté en la direccion indicada
-        for (let [iBarcoActual, jBarcoActual] of barcoActual) {
-            if (direccion === "Horizontal" && (i !== iBarcoActual + 1 || i !== iBarcoActual - 1) && j !== jBarcoActual) {
-                esValidaHorizontal = false;
+        let esValida = false;
+        for (let [ultimaI, ultimaJ] of barcoActual) {
+            if (direccion === "Horizontal" && (i === ultimaI + 1 || i === ultimaI - 1) && j === ultimaJ) {
+                esValida = true;
                 break;
             }
-            if (direccion === "Vertical" && (j !== jBarcoActual + 1 || j !== jBarcoActual - 1) && i !== iBarcoActual) {
-                esValidaVertical = false;
+            if (direccion === "Vertical" && (j === ultimaJ + 1 || j === ultimaJ - 1) && i === ultimaI) {
+                esValida = true;
                 break;
             }
         }
-        //Comprobamos si es valido
-        if (!esValidaVertical) {
-            mensaje.innerHTML = "<h3>El barco solo puede colocarse arriba o abajo en vertical desde la ultima casilla.</h3>";
-            return false;
-        }
-        if (!esValidaHorizontal) {
-            mensaje.innerHTML = "<h3>El barco solo puede colocarse a la izquierda o derecha en horizontal desde la ultima casilla.</h3>";
+        if (!esValida) {
+            mensaje.innerHTML = "<h3>El barco solo puede colocarse en una posición contigua válida.</h3>";
             return false;
         }
     }
@@ -151,6 +144,21 @@ this.pintarBarco = function(i, j, direccion) {
     // Comprobar si el barco está completamente colocado
     if (this.barcos[this.barcosColocados][1].length === this.barcos[this.barcosColocados][0]) {
         this.barcosColocados++; 
+        if(this.barcosColocados >= this.barcos.length){ // TODO COLOCAO'
+            let botonSiguiente = document.createElement("button");
+            botonSiguiente.textContent = "Jugador Amarillo Disparar";
+
+            botonSiguiente.addEventListener("click", function (){
+                console.log('a');
+            });
+            botones.appendChild(botonSiguiente);
+
+            // Verifica si el botón existe antes de intentar eliminarlo
+            if (jugadorRojo.botonRotar) {
+                botones.removeChild(jugadorRojo.botonRotar);
+                jugadorRojo.botonRotar = null; // Evitar referencias colgantes
+            }
+        }
     }
 
     mensajeBarco.innerHTML = 
