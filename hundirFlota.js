@@ -121,16 +121,18 @@ this.pintarBarco = function(i, j, direccion) {
     if (barcoActual.length > 0) {
         let esValidaVertical = true;
         let esValidaHorizontal = true;
-        for (let [ultimaI, ultimaJ] of barcoActual) {
-            if (direccion === "Horizontal" && (i !== ultimaI + 1 || i !== ultimaI - 1) && j !== ultimaJ) {
+        //Comprueba que es la posicion es adyacente a alguna casilla del barco y que esté en la direccion indicada
+        for (let [iBarcoActual, jBarcoActual] of barcoActual) {
+            if (direccion === "Horizontal" && (i !== iBarcoActual + 1 || i !== iBarcoActual - 1) && j !== jBarcoActual) {
                 esValidaHorizontal = false;
                 break;
             }
-            if (direccion === "Vertical" && (j !== ultimaJ + 1 || j !== ultimaJ - 1) && i !== ultimaI) {
+            if (direccion === "Vertical" && (j !== jBarcoActual + 1 || j !== jBarcoActual - 1) && i !== iBarcoActual) {
                 esValidaVertical = false;
                 break;
             }
         }
+        //Comprobamos si es valido
         if (!esValidaVertical) {
             mensaje.innerHTML = "<h3>El barco solo puede colocarse arriba o abajo en vertical desde la ultima casilla.</h3>";
             return false;
