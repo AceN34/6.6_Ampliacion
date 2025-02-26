@@ -70,13 +70,15 @@ function Jugador(color, tamanio) {
             mensaje.innerHTML = "<h3>No se puede rotar mientras se está colocando un barco, excepto en la primera celda.</h3>";
             return;
         }
-
+        // Cambiar dirección y limpiar mensaje si todo sale bien
         if (this.direccion === "Horizontal") {
             this.direccion = "Vertical";
             direccionBarco.innerHTML = this.direccion;
+            mensaje.innerHTML = "";
         } else {
             this.direccion = "Horizontal";
             direccionBarco.innerHTML = this.direccion;
+            mensaje.innerHTML = "";
         }
         console.log(this.direccion);
     }
@@ -130,6 +132,8 @@ this.pintarBarco = function(i, j, direccion) {
 
     this.barcos[this.barcosColocados][1].push([i, j]);
     this.tablero[i][j].classList.add('barco');
+    // Limpiar mensaje si todo sale bien
+    mensaje.innerHTML = "";
 
     // Comprobar si el barco está completamente colocado
     if (this.barcos[this.barcosColocados][1].length === this.barcos[this.barcosColocados][0]) {
