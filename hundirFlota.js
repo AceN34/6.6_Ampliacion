@@ -66,7 +66,7 @@ function Jugador(color, tamanio) {
         let barcoActual = this.tablero.barcos[this.tablero.barcosColocados];
 
         // Verificar si el barcoActual está definido y si se ha empezado a colocar
-        if (barcoActual && barcoActual.length > 1 && barcoActual[1].length > 0) {
+        if (barcoActual && barcoActual.length > 1 && barcoActual[1].length > 1) {
             mensaje.innerHTML = "<h3>No se puede rotar mientras se está colocando un barco, excepto en la primera celda.</h3>";
             return;
         }
