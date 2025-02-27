@@ -206,10 +206,10 @@ this.pintarBarco = function(i, j, direccion) {
         if(this.barcosColocados >= this.barcos.length){ // TODO COLOCAO'
             let botonSiguiente = document.createElement("button");
             botonSiguiente.textContent = "Siguiente fase";
-
+            direccionBarco.innerHTML = "";
             /////////////////////////////////////////////////// FASE DE DISPAROS //////////////////////////////////
-            botonSiguiente.addEventListener("click", function (){
-                
+            botonSiguiente.addEventListener("click", function () {
+                mensajeBarco.innerHTML = "";
                 jugadorRojo.cambiarModo();
                 jugadorAmarillo = new Jugador('amarillo', tamanio);
                 jugadorAmarillo.mostrarTablero();
@@ -300,7 +300,7 @@ function victoria(jugador) {
     mensaje.innerHTML = ('Ha ganado el jugador ' + jugador.color);
     contenedor.innerHTML ="";
     let mejor = mejorPuntuacion(turno);
-    contenedor.innerHTML ="<br> A NECESITADO: "+turno+" turnos. <br> Actualmente el mejor resultado fueron: "+mejor+" turnos";
+    contenedor.innerHTML ="<br> HA NECESITADO: "+turno+" turnos. <br> Actualmente el mejor resultado fueron: "+mejor+" turnos";
 
     
 }
