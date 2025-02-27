@@ -9,6 +9,8 @@ window.onload = function() {
 };
   // variables del programa
 let jugadorRojo;
+let jugadorAmarillo;
+
 let turno = 0;
 
 
@@ -86,6 +88,55 @@ function Jugador(color, tamanio) {
     this.colocarBarco = function(i,j) {
         this.tablero.pintarBarco(i,j, this.direccion);
     }
+
+    this.disparar = function(i,j, receptor) {
+        receptor.recibirDisparo(i,j);
+        turno++;
+    }
+    this.recibirDisparo = function(i, j) {
+        let impacto = false;
+        
+        for (let barco of this.tablero.getBarcos()) {
+            console.log(barco);
+            let longitud = barco[0];
+            let posiciones = barco.slice(1);
+    
+            for (let k = 0; k < posiciones.length; k++) {
+                let posicion = posiciones[k];
+                if (posicion[0] === i && posicion[1] === j) {
+                    console.log("Tocado");
+                    mensaje.innerHTML = "Tocado!";
+                    impacto = true;
+    
+                    // Buscar la celda en el tablero del atacante
+                    let celdaAtacante = jugadorAmarillo.tablero.tablero[i][j]; 
+                    if (celdaAtacante) {
+                        celdaAtacante.classList.add('impacto');
+                    }
+    
+                    // Remover la posición del barco para marcar que fue alcanzado
+                    barco.splice(k + 1, 1);
+    
+                    if (barco.length === 1) {
+                        console.log("Hundido");
+                        mensaje.innerHTML = "Hundido!";
+                    }
+                    break;
+                }
+            }
+        }
+    
+        if (!impacto) {
+            console.log("Mar");
+            mensaje.innerHTML = "Mar...";
+    
+            let celdaAtacante = jugadorAmarillo.tablero.tablero[i][j];
+            if (celdaAtacante) {
+                celdaAtacante.classList.add('fallo');
+            }
+        }
+    };
+    
 }
 
 // objeto tablero
@@ -149,11 +200,13 @@ this.pintarBarco = function(i, j, direccion) {
             let botonSiguiente = document.createElement("button");
             botonSiguiente.textContent = "Siguiente fase";
 
+            /////////////////////////////////////////////////// FASE DE DISPAROS //////////////////////////////////
             botonSiguiente.addEventListener("click", function (){
                 
-                
-                let jugadorAmarillo = new Jugador('amarillo', tamanio);
+                jugadorRojo.cambiarModo();
+                jugadorAmarillo = new Jugador('amarillo', tamanio);
                 jugadorAmarillo.mostrarTablero();
+                turno++;
 
                 botones.removeChild(botonSiguiente);
             });
@@ -215,18 +268,26 @@ this.mostrarTablero = function() {
     contenedor.appendChild(tabla);
 };
 
+this.getBarcos = function() { 
+    return this.barcos;
+}
+
 this.inicializarTablero();
 
 }
 
 function devolverPosicion(i, j) {
 console.log("Casilla seleccionada: ", i, j);
-if(turno < 1) {
+console.log(turno);
+if(turno <= 0) {
     if(jugadorRojo.getModo() === true){ // aquí el tipo está en modo bob el constructor 
         jugadorRojo.colocarBarco(i,j);
-    }
+    } 
 
-} 
+} else {
+    console.log("BOOOM");
+    jugadorAmarillo.disparar(i,j, jugadorRojo);
+}
 }
     /* Cada turno se evaluará si se ha ganao' o todavía no */ 
     function victoria() {
