@@ -144,12 +144,18 @@ this.pintarBarco = function(i, j, direccion) {
     // Comprobar si el barco está completamente colocado
     if (this.barcos[this.barcosColocados][1].length === this.barcos[this.barcosColocados][0]) {
         this.barcosColocados++; 
+        
         if(this.barcosColocados >= this.barcos.length){ // TODO COLOCAO'
             let botonSiguiente = document.createElement("button");
-            botonSiguiente.textContent = "Jugador Amarillo Disparar";
+            botonSiguiente.textContent = "Siguiente fase";
 
             botonSiguiente.addEventListener("click", function (){
-                console.log('a');
+                
+                
+                let jugadorAmarillo = new Jugador('amarillo', tamanio);
+                jugadorAmarillo.mostrarTablero();
+
+                botones.removeChild(botonSiguiente);
             });
             botones.appendChild(botonSiguiente);
 
