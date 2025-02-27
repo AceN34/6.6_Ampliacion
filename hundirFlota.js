@@ -296,7 +296,42 @@ if(turno <= 0) {
 }
 }
     /* Cada turno se evaluará si se ha ganao' o todavía no */ 
-    function victoria(jugador) {
-        mensaje.innerHTML = ('Ha ganado el jugador ' + jugador.color);
-        contenedor.innerHTML ="";
+function victoria(jugador) {
+    mensaje.innerHTML = ('Ha ganado el jugador ' + jugador.color);
+    contenedor.innerHTML ="";
+    let mejor = mejorPuntuacion(turno);
+    contenedor.innerHTML ="<br> A NECESITADO: "+turno+" turnos. <br> Actualmente el mejor resultado fueron: "+mejor+" turnos";
+
+    
+}
+
+
+    // lo de las cookies que falta
+    function mejorPuntuacion(puntuacion) {
+        let mejor = getCookie("mejor");
+        
+        if (mejor === null) {
+            mejor = puntuacion;
+        } else {
+            mejor = parseInt(mejor);
+            if (puntuacion < mejor) {
+                mejor = puntuacion;
+            }
+        }
+            document.cookie = `mejor=${mejor}`;
+    
+        return mejor;
     }
+    
+    
+
+function getCookie(nombre){
+    let cookies = document.cookie.split(";");
+    for(let cookie of cookies){
+        let [name, value] = cookie.split("=");
+        if(name.trim() === nombre){
+            return value;
+        }
+    }
+    return null;
+}
