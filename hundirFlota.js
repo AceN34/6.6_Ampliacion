@@ -96,7 +96,7 @@ function Jugador(color, tamanio) {
         turno++;
 
         if (resultado === "victoria"){
-            victoria();
+            victoria(this);
         } else {
             let celdaAtacante = this.tablero.tablero[i][j]; // La celda en el tablero del que dispara
             if (resultado === "impacto") {
