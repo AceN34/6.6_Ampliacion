@@ -30,6 +30,7 @@ function Jugador(color, tamanio) {
     this.color = color;
     this.tablero = new Tablero(color, tamanio);
     this.modoColocar = false; // false -> jugando  true -> colocar
+    this.hundidos = 0;
 
     // barcos
     this.botonRotar = null;
@@ -93,13 +94,19 @@ function Jugador(color, tamanio) {
         let resultado = receptor.recibirDisparo(i, j);
         console.log(resultado);
         turno++;
-    
-        let celdaAtacante = this.tablero.tablero[i][j]; // La celda en el tablero del que dispara
+
+        if (resultado === "victoria"){
+            victoria();
+        } else {
+            let celdaAtacante = this.tablero.tablero[i][j]; // La celda en el tablero del que dispara
             if (resultado === "impacto") {
                 celdaAtacante.classList.add('impacto');
             } else {
                 celdaAtacante.classList.add('fallo');
             }
+        }
+    
+       
 
     };
     this.recibirDisparo = function(i, j) {
@@ -121,6 +128,10 @@ function Jugador(color, tamanio) {
                     if (posiciones.length === 0) { // Si ya no quedan posiciones, hundido
                         console.log("¡Hundido!");
                         mensaje.innerHTML = "¡Hundido!";
+                        this.hundidos++;
+                        if(this.hundidos === this.tablero.barcos.length) {
+                            return "victoria";                     
+                        }
                     }
     
                     return "impacto"; 
@@ -285,12 +296,7 @@ if(turno <= 0) {
 }
 }
     /* Cada turno se evaluará si se ha ganao' o todavía no */ 
-    function victoria() {
-        for (let barco of this.barcos) {
-            if (!barco.hundido) {
-                return false;
-            }
-        }
-        mensaje.innerHTML = ('Has ganado jugador ' + this.color);
-        return true;
+    function victoria(jugador) {
+        mensaje.innerHTML = ('Ha ganado el jugador ' + jugador.color);
+        contenedor.innerHTML ="";
     }
