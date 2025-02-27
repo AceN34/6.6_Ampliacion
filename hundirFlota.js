@@ -89,53 +89,49 @@ function Jugador(color, tamanio) {
         this.tablero.pintarBarco(i,j, this.direccion);
     }
 
-    this.disparar = function(i,j, receptor) {
-        receptor.recibirDisparo(i,j);
+    this.disparar = function(i, j, receptor) {
+        let resultado = receptor.recibirDisparo(i, j);
+        console.log(resultado);
         turno++;
-    }
+    
+        let celdaAtacante = this.tablero.tablero[i][j]; // La celda en el tablero del que dispara
+            if (resultado === "impacto") {
+                celdaAtacante.classList.add('impacto');
+            } else {
+                celdaAtacante.classList.add('fallo');
+            }
+
+    };
     this.recibirDisparo = function(i, j) {
         let impacto = false;
-        
-        for (let barco of this.tablero.getBarcos()) {
-            console.log(barco);
-            let longitud = barco[0];
-            let posiciones = barco.slice(1);
     
-            for (let k = 0; k < posiciones.length; k++) {
-                let posicion = posiciones[k];
-                if (posicion[0] === i && posicion[1] === j) {
-                    console.log("Tocado");
-                    mensaje.innerHTML = "Tocado!";
+        for (let barco of this.tablero.barcos) {
+            let posiciones = barco[1]; // Acceder correctamente a la lista de posiciones
+    
+            for (let n = 0;n < posiciones.length; n++) {
+                let [barcoI, barcoJ] = posiciones[n];
+    
+                if (barcoI === i && barcoJ === j) { 
+                    mensaje.innerHTML = "¡Tocado!";
                     impacto = true;
     
-                    // Buscar la celda en el tablero del atacante
-                    let celdaAtacante = jugadorAmarillo.tablero.tablero[i][j]; 
-                    if (celdaAtacante) {
-                        celdaAtacante.classList.add('impacto');
+                    // a tocar por saco la posición alcanzada
+                    posiciones.splice(n, 1);
+    
+                    if (posiciones.length === 0) { // Si ya no quedan posiciones, hundido
+                        console.log("¡Hundido!");
+                        mensaje.innerHTML = "¡Hundido!";
                     }
     
-                    // Remover la posición del barco para marcar que fue alcanzado
-                    barco.splice(k + 1, 1);
-    
-                    if (barco.length === 1) {
-                        console.log("Hundido");
-                        mensaje.innerHTML = "Hundido!";
-                    }
-                    break;
+                    return "impacto"; 
                 }
             }
         }
-    
-        if (!impacto) {
-            console.log("Mar");
-            mensaje.innerHTML = "Mar...";
-    
-            let celdaAtacante = jugadorAmarillo.tablero.tablero[i][j];
-            if (celdaAtacante) {
-                celdaAtacante.classList.add('fallo');
-            }
-        }
+
+        mensaje.innerHTML = "Agua";
+        return "fallo";
     };
+    
     
 }
 
@@ -285,7 +281,6 @@ if(turno <= 0) {
     } 
 
 } else {
-    console.log("BOOOM");
     jugadorAmarillo.disparar(i,j, jugadorRojo);
 }
 }
